@@ -10,15 +10,9 @@
 
     <properties>
 
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <aspectj.version>1.8.10</aspectj.version>
-        <cucumber.version>4.8.0</cucumber.version>
-        <junit.version>5.6.0</junit.version>
-        <allure.version>2.13.1</allure.version>
-        <allure.cmd.download.url>
-            https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline
-        </allure.cmd.download.url>
+        <junit.platform.version>1.7.0</junit.platform.version>
+        <junit.jupiter.version>5.7.0</junit.jupiter.version>
+        <allure.version>2.14.0</allure.version>
     </properties>
 
 
@@ -76,17 +70,29 @@
             <version>2.13.8</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.14.3</version>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.14.3</version>
-            <scope>compile</scope>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-assertj</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.6</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -102,25 +108,44 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
 
-
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <useSystemClassLoader>false</useSystemClassLoader>
+                <configuration>
+                    <includes>
+                        <include>*/**</include>
+                    </includes>
+                    <groups>create</groups>
+                    <testFailureIgnore>false</testFailureIgnore>
                     <argLine>
-                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/1.9.6/aspectjweaver-1.9.6.jar"
                     </argLine>
+                    <systemProperties>
+                        <property>
+                            <name>junit.jupiter.extensions.autodetection.enabled</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+                    <systemPropertyVariables>
+                        <allure.results.directory>target/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjweaver</artifactId>
-                        <version>${aspectj.version}</version>
+                        <version>1.9.6</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -129,28 +154,14 @@
                 <artifactId>allure-maven</artifactId>
                 <version>2.10.0</version>
                 <configuration>
-                    <reportVersion>${allure.version}</reportVersion>
+                    <resultsDirectory>${basedir}/target/allure-results</resultsDirectory>
 
-                    <resultsDirectory>${basedir}/target/allure-report</resultsDirectory>
-                    <reportDirectory>${basedir}/target/allure-report</reportDirectory>
-
-                    <allureDownloadUrl>
-                        ${allure.cmd.download.url}/${allure.version}/allure-commandline-${allure.version}.zip
-                    </allureDownloadUrl>
-                </configuration>
-            </plugin>
-            <!-- Maven plugin to use perticular java version to compile code -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <allureDownloadUrl>https://github.com/allure-framework/allure2/releases/download/2.14.0/allure-2.14.0.zip</allureDownloadUrl>
                 </configuration>
             </plugin>
         </plugins>
+
+        <testOutputDirectory>target/classes</testOutputDirectory>
     </build>
 
 
