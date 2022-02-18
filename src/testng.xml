@@ -4,9 +4,9 @@
     <test name="Tests">
 
         <classes>
-            <class name="com.chi.testtask.yota.tests.UserTests" />
-            <class name="com.chi.testtask.yota.tests.AdminTests"/>
-            <class name="com.chi.testtask.yota.tests.BusinessFlowTests"></class>
+            <class name="com.SVOI.testtask.yota.tests.UserTests" />
+            <class name="com.SVOI.testtask.yota.tests.AdminTests"/>
+            <class name="com.SVOI.testtask.yota.tests.BusinessFlowTests"></class>
         </classes>
     </test>
 </suite>
